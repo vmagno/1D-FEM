@@ -9,13 +9,13 @@ run error
 
 xMin=0;
 xMax=1;
-nEls=2;
+nEls=10;
 [nN,nodeCoords,connect,nB,bEls,bPts]=mesh(xMin,xMax,nEls);
 
 %*******************degrees of freedom*************************************
 
 pDeg=zeros(nEls,1);
-pDeg(:,1)=2;     %set polynomial degree for each element
+pDeg(:,1)=1;     %set polynomial degree for each element
 %pDeg=[1,2,2,1]';   %could set each element individually
 pType=zeros(nEls,1);
 pType(:,1)=1;   %set element type: 1=Lagrangian, 2=hierarchical
