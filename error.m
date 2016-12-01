@@ -13,6 +13,7 @@ function [y, dy] = exactResult2(k, x)
   t1 = exp(x./k);
   t2 = exp(1/k);
   y = (t1 - t2) / (1 - t2);
+  dy = (t1) .* (1/k) ./ (1 - t2);
   
   if (isnan(y))
     x
@@ -24,7 +25,7 @@ function [y, dy] = exactResult2(k, x)
     y
   endif
 %  y = (num ./ denom) - 1/denom;
-  dy = (1 / (k * denom)) * num;
+%  dy = (1 / (k * denom)) * num;
 endfunction
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
