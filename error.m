@@ -8,7 +8,22 @@ endfunction
 function [y, dy] = exactResult2(k, x)
   num = exp((x - 1) ./ k);
   denom = (exp(-1/k) - 1);
-  y = (num - 1) ./ denom;
+%  y = (num - 1) ./ denom;
+  
+  t1 = exp(x./k);
+  t2 = exp(1/k);
+  y = (t1 - t2) / (1 - t2);
+  
+  if (isnan(y))
+    x
+    k
+    (x-1) / k
+    exp((x-1)/k)
+    num
+    denom
+    y
+  endif
+%  y = (num ./ denom) - 1/denom;
   dy = (1 / (k * denom)) * num;
 endfunction
 
@@ -17,19 +32,27 @@ endfunction
 %   ku'' + cu' + bu + f = 0
 %
 
-function errorNorm(nEls,nodeCoords,connect,elDof,dFreedom,pDeg,pType,u,k,c,b,f)
+function [L2Norm, H1Norm] = errorNorm(nEls,nodeCoords,connect,elDof,dFreedom,pDeg,pType,u,k,c,b,f)
   %%%%%%%%%%%%%
   % Norm of error is Sum_elem ( int((uexact - uh)^2) )
   %
   % With gaussian quadrature: Sum_elem( Sum_gpoints ( weight * (uexact - uh)^2 * h/2 ) )
 
   %figure(2)
-  x = 0:0.1:1;
+  x = 0:0.001:1;
+  [y, dy] = exactResult2(k(x), x);
+  
+%  y
   
   subplot(2,2,3)
   hold on
   axis square
-  plot(x,exactResult2(k(x), x))
+  plot(x,y)
+  
+  subplot(2,2,4)
+  hold on
+  axis square
+  plot(x,dy)
   
   for iElem = 1:nEls
     for i = 1:elDof(iElem)
@@ -77,7 +100,8 @@ function errorNorm(nEls,nodeCoords,connect,elDof,dFreedom,pDeg,pType,u,k,c,b,f)
     
   end
 
-  L2Norm = sqrt(TotalError)
-  L2DerivNorm = sqrt(TotalDerivError)
+  L2Norm = sqrt(TotalError);
+  L2DerivNorm = sqrt(TotalDerivError);
+  H1Norm = sqrt(TotalError + TotalDerivError);
 
 endfunction
