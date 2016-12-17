@@ -30,13 +30,18 @@ endfunction
 
 function [y, dy] = exactResultAdjoint(k, x_0, x)
   
-  C0 = (exp(-x_0 / k) - exp(-1/k)) / (exp(-1/k) - 1);
+  C0 = (exp((1-x_0) / k) - 1) / (1 - exp(1/k));
   C1 = -C0;
   
   for i = 1:numel(x)
-  
-    y(i) = C0 + C1 * exp(x(i) / k) + (heaviside(x(i) - x_0) * (1 - exp((x(i) - x_0)/k)));
-    dy(i) = (1/k)*C1 * exp(x(i) / k) + (-1/k) * exp((x(i) - x_0)/k) * heaviside(x(i) - x_0);
+    
+    if (x(i) >= x_0)
+      y(i) = C0 + C1 * exp(x(i) / k) + (1 - exp((x(i) - x_0)/k));
+      dy(i) = (1/k)*C1 * exp(x(i) / k) + (-1/k) * exp((x(i) - x_0)/k);
+    else
+      y(i) = C0 + C1 * exp(x(i) / k);
+      dy(i) = (1/k)*C1 * exp(x(i) / k);
+    endif
   
   endfor
   
