@@ -1,8 +1,4 @@
 function [L2Norm, H1Norm, ElemL2Error, ElemH1Error] = main(nElem = 2, degree = 1, viscosity = 1, toRefine = [])
-%clc
-close all
-
-run error
 %*******************main code for the 1D finite element solver*************
 
 %**************************build mesh**************************************
@@ -46,7 +42,7 @@ syms x
 k=@(x)-viscosity;
 c=@(x)1;
 b=@(x)0;
-f=@(x)0;
+f=@(x)-1;
 %f=@(x)(heaviside(x-.3)-heaviside(x-.6))*-1;
 [K,F]=element(nEls,nodeCoords,connect,xiQ,wQ,pDeg,pType,elDof,dFreedom,k,c,b,f, x_0);
 
@@ -68,6 +64,3 @@ u=K\F;
 figure(1)
 postProc(nEls,nodeCoords,connect,elDof,dFreedom,pDeg,pType,u);
 [L2Norm, H1Norm, ElemL2Error, ElemH1Error] = errorNorm(nEls,nodeCoords,connect,elDof,dFreedom,pDeg,pType,u,k,c,b,f,x_0);
-
-
-
