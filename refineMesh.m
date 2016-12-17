@@ -1,4 +1,4 @@
-function [outNumNodes, outNumElem, outNodeCoords, outConnect] = refineMesh(nNodes, nodeCoords, connect, elementIds)
+function [outNumNodes, outNumElem, outNodeCoords, outConnect] = refineMesh(nNodes, nodeCoords, connect, lastElem, elementIds)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Refine the input mesh by dividing the chosen elements into 2 elements each
 %
@@ -23,9 +23,18 @@ for iToDivide = 1:numel(elementIds)
   outNodeCoords(outNumNodes) = elemMiddle;
   
   % Adjust connectivity
-  outConnect(outNumNodes-1,2) = connect(iElem,2);
-  outConnect(iElem,2) = outNumNodes;
-  outConnect(outNumNodes-1,1) = outNumNodes;
+  if (iElem != lastElem)
+    outConnect(outNumNodes-1,2) = connect(iElem,2);
+    outConnect(iElem,2) = outNumNodes;
+    outConnect(outNumNodes-1,1) = outNumNodes;
+  else
+    outConnect(outNumNodes-1,1) = connect(iElem,1);
+    outConnect(iElem,1) = outNumNodes;
+    outConnect(outNumNodes-1,2) = outNumNodes;
+  endif
+  
+  outNodeCoords
+  outConnect
   
 endfor
 
