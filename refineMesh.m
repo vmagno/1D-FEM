@@ -14,15 +14,19 @@ outConnect = connect;
 
 for iToDivide = 1:numel(elementIds)
   iElem = elementIds(iToDivide);
+  
+  % Midpoint
   elemMiddle = (nodeCoords(connect(iElem,1)) + nodeCoords(connect(iElem,2))) / 2;
+  
+  % Add the coordinates
   outNumNodes = outNumNodes + 1;
   outNodeCoords(outNumNodes) = elemMiddle;
+  
+  % Adjust connectivity
   outConnect(outNumNodes-1,2) = connect(iElem,2);
   outConnect(iElem,2) = outNumNodes;
   outConnect(outNumNodes-1,1) = outNumNodes;
   
-  outNodeCoords;
-  outConnect;
 endfor
 
 outNumElem = outNumNodes - 1;
