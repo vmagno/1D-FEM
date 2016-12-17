@@ -33,8 +33,8 @@ for iToDivide = 1:numel(elementIds)
     outConnect(outNumNodes-1,2) = outNumNodes;
   endif
   
-  outNodeCoords
-  outConnect
+%  outNodeCoords
+%  outConnect
   
 endfor
 
