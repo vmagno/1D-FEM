@@ -47,7 +47,7 @@ endfunction
 %   ku'' + cu' + bu + f = 0
 %
 
-function [L2Norm, H1Norm, ElemL2Error, ElemH1Error] = errorNorm(nEls,nodeCoords,connect,elDof,dFreedom,pDeg,pType,u,k,c,b,f)
+function [L2Norm, H1Norm, ElemL2Error, ElemH1Error] = errorNorm(nEls,nodeCoords,connect,elDof,dFreedom,pDeg,pType,u,k,c,b,f,x_0)
   %%%%%%%%%%%%%
   % Norm of error is Sum_elem ( int((uexact - uh)^2) )
   %
@@ -55,7 +55,7 @@ function [L2Norm, H1Norm, ElemL2Error, ElemH1Error] = errorNorm(nEls,nodeCoords,
 
   %figure(2)
   x = 0:0.001:1;
-  [y, dy] = exactResultAdjoint(k(x), 0.25, x);
+  [y, dy] = exactResultAdjoint(k(x), x_0, x);
   
 %  y
   
@@ -105,7 +105,7 @@ function [L2Norm, H1Norm, ElemL2Error, ElemH1Error] = errorNorm(nEls,nodeCoords,
       end
       
       % Value of exact solution at point xi (xq)
-      [uexact, duexact] = exactResultAdjoint(k(xq), 0.25, xq);
+      [uexact, duexact] = exactResultAdjoint(k(xq), x_0, xq);
       
       % Value at this gaussian point
       Error = wq * (uexact - uh)^2 * h / 2;
