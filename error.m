@@ -68,11 +68,17 @@ function [L2Norm, H1Norm, ElemL2Error, ElemH1Error] = errorNorm(nEls,nodeCoords,
   hold on
   axis square
   plot(x,y)
+  xlabel('x')
+  ylabel('u(x)')
+  title("Solution exacte")
   
   subplot(2,2,4)
   hold on
   axis square
   plot(x,dy)
+  xlabel('x')
+  ylabel("u'(x)")
+  title("Dérivée de la solution exacte")
   
   for iElem = 1:nEls
     for i = 1:elDof(iElem)

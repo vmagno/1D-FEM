@@ -30,10 +30,17 @@ for ne = 1:nEls
     hold on
     axis square
     plot(x,u)
+    xlabel('x')
+    ylabel('u(x)')
+    title('Solution éléments finis')
     subplot(2,2,2)
     hold on
     axis square
     plot(x,du)
+    xlabel('x')
+    ylabel("u'(x)")
+    title('Dérivée de la solution EF')
+    
     
 end
 
