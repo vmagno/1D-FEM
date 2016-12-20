@@ -3,7 +3,7 @@ clear all
 close all
 
 degree = 1;
-viscosity = 1;
+viscosity = 0.1;
 
 xMin=0;
 xMax=1;
@@ -18,9 +18,16 @@ mMesh = struct(
 	'bEls',bEls,
 	'bPts',bPts);
 
-for i=1:10
+err = [];
+dofs = [];
+
+for i=1:20
 	residualError = main_residual(mMesh,degree,viscosity);
+	err = [err sqrt(sum(residualError.^2))];
+	dofs = [dofs mMesh.nN];
 	maxErr = max(residualError);
     mMesh = refineMesh(mMesh,find(residualError>0.5*maxErr));
 end
 
+figure;
+plot(log(dofs), log(err));
