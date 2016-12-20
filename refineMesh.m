@@ -1,4 +1,4 @@
-function [outNumNodes, outNumElem, outNodeCoords, outConnect] = refineMesh(nNodes, nodeCoords, connect, lastElem, elementIds)
+function outMesh = refineMesh(mesh, elementIds)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Refine the input mesh by dividing the chosen elements into 2 elements each
 %
@@ -8,36 +8,26 @@ function [outNumNodes, outNumElem, outNodeCoords, outConnect] = refineMesh(nNode
 % Returns the final number of nodes
 %
 
-outNumNodes = nNodes;
-outNodeCoords = nodeCoords;
-outConnect = connect;
+outMesh = mesh;
 
-for iToDivide = 1:numel(elementIds)
-  iElem = elementIds(iToDivide);
+for iElem = unique(elementIds)
   
   % Midpoint
-  elemMiddle = (nodeCoords(connect(iElem,1)) + nodeCoords(connect(iElem,2))) / 2;
+  elemMiddle = (mesh.nodeCoords(mesh.connect(iElem,1)) + mesh.nodeCoords(mesh.connect(iElem,2))) / 2;
   
   % Add the coordinates
-  outNumNodes = outNumNodes + 1;
-  outNodeCoords(outNumNodes) = elemMiddle;
-  
+  outMesh.nodeCoords(++outMesh.nN) = elemMiddle;
+
   % Adjust connectivity
-  if (iElem != lastElem)
-    outConnect(outNumNodes-1,2) = connect(iElem,2);
-    outConnect(iElem,2) = outNumNodes;
-    outConnect(outNumNodes-1,1) = outNumNodes;
-  else
-    outConnect(outNumNodes-1,1) = connect(iElem,1);
-    outConnect(iElem,1) = outNumNodes;
-    outConnect(outNumNodes-1,2) = outNumNodes;
-  endif
+  outMesh.connect(iElem,2) = outMesh.nN;
+  outMesh.connect = [outMesh.connect; [outMesh.nN, mesh.connect(iElem,2)]];
   
-%  outNodeCoords
-%  outConnect
-  
-endfor
+  outMesh.nEls++;
 
-outNumElem = outNumNodes - 1;
+  bIdx = find(mesh.bEls==iElem);
+  if bIdx & mesh.bPts(bIdx)==2
+	  outMesh.bEls(bIdx)=outMesh.nEls;
+  end
+end
 
-endfunction
+end
