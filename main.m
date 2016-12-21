@@ -43,7 +43,7 @@ pType(:,1)=2;   %set element type: 1=Lagrangian, 2=hierarchical
 %build k and f for each element; sum to find K and F
 %set k,c,b,f:
 syms x
-k=@(x)-viscosity;
+k=@(x)viscosity;
 c=@(x)1;
 b=@(x)0;
 f=@(x)0;
